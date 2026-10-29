@@ -1,0 +1,4 @@
+# Windows-скрипты: CRLF и байты как есть (в .ps1 есть метка UTF-8 BOM - без неё Windows PowerShell ломает русский текст)
+*.bat  text eol=crlf
+*.ps1  text eol=crlf
+*.jpg  binary

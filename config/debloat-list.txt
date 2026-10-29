@@ -1,0 +1,37 @@
+# Что отключать на Яндекс ТВ. Всё обратимо (pm disable-user), ничего не удаляется.
+# Формат:  пакет | описание
+# [safe]           - отключается всегда
+# [ask:Вопрос?]    - скрипт спросит да/нет для всей группы
+# Пакеты, которых нет на твоём телевизоре, просто пропускаются.
+# НЕ добавляй сюда: com.yandex.tv.services*, com.yandex.tv.settings, com.android.systemui,
+# ru.yandex.androidkeyboard.tv, com.yandex.devices.appstore, com.mediatek.* для HDMI/антенны - без них ТВ сломается.
+
+[safe]
+com.yandex.tv.bugreportsender      | Отправка отчётов об ошибках в Яндекс
+com.yandex.android.advid           | Рекламный идентификатор
+com.yandex.devices.farm.companion  | Служебная утилита тестовой фермы
+com.ctv.autotest.helper            | Заводской автотест
+com.mtk.bluetooth.dualmode         | Демо Bluetooth
+com.android.calendar               | Календарь
+com.android.contacts               | Контакты
+
+[ask:Отключить заводское сервисное меню? Освободит ~130 МБ памяти. НО если ты включал ADB через это меню (Menu, Влево, Вверх, Влево, Вверх, Назад) - лучше ответь n: без него ADB потом не включить обратно]
+mediatek.factorymenu.ui            | Заводское сервисное меню (висит в памяти)
+
+[ask:Отключить Алису и голосовой поиск? (если пульт без микрофона или Алиса не нужна)]
+com.yandex.tv.alice                | Алиса
+com.yandex.devices.player          | Плеер для Алисы и умных устройств
+com.yandex.io.sdk                  | Сервис Алисы и умного дома (может не отключиться - это нормально)
+
+[ask:Отключить эфирные каналы Яндекса? (HDMI и антенна продолжат работать)]
+com.yandex.tv.live                 | Эфирные каналы Яндекса
+com.yandex.tv.input.efir           | Источник эфирных каналов
+
+[ask:Отключить трансляцию с телефона (Miracast)?]
+com.mediatek.androidbox            | Miracast
+
+[ask:Отключить Яндекс Браузер?]
+com.yandex.browser.tv              | Яндекс Браузер
+
+[ask:Отключить автообновления Яндекса? (меньше памяти, но система не будет обновляться)]
+com.yandex.launcher.updaterapp     | Яндекс Апдейтер (может не отключиться - это нормально)

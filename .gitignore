@@ -1,0 +1,8 @@
+# Личное и скачиваемое - не выкладывать
+data/
+tools/
+vpn-subscription.txt
+my-wallpapers/*
+!my-wallpapers/README.txt
+*.apk
+*.keystore

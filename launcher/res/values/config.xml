@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Настройки домашнего экрана. Поменял - запусти 3-launcher.bat.
+     Имена пакетов своих приложений: data\inspect-*\report.txt (раздел "Установленные пользователем"). -->
+<resources>
+    <!-- Док слева направо. "hdmi" - плитка, которая сразу включает HDMI (приставка, ресивер).
+         Неустановленные приложения пропускаются. -->
+    <string-array name="dock_apps">
+        <item>hdmi</item>
+        <item>ru.kinopoisk.yandex.tv</item>
+        <item>org.smarttube.stable</item>
+        <item>ru.rutube.app</item>
+        <item>com.vk.tv</item>
+    </string-array>
+
+    <!-- Не показывать плитками: системные штуки Яндекса и MediaTek. -->
+    <string-array name="hidden_apps">
+        <item>com.yandex.tv.home</item>
+        <item>com.yandex.tv.setupwizard</item>
+        <item>com.yandex.tv.input.efir</item>
+        <item>com.mediatek.wwtv.setupwizard</item>
+        <item>com.mediatek.wwtv.tvcenter</item>
+        <item>mediatek.factorymenu.ui</item>
+        <item>com.ctv.autotest.helper</item>
+        <item>com.mediatek.androidbox</item>
+        <item>com.mtk.bluetooth.dualmode</item>
+    </string-array>
+
+    <!-- Приложение эфирного ТВ / источников на MediaTek. -->
+    <string name="live_tv_package" translatable="false">com.mediatek.wwtv.tvcenter</string>
+    <string name="input_picker_package" translatable="false">com.mediatek.wwtv.tvcenter</string>
+
+    <integer name="columns">5</integer>
+</resources>
