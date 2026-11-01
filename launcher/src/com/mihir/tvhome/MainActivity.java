@@ -563,11 +563,29 @@ public class MainActivity extends Activity {
             boolean connected = tim.getInputState(t.getId()) == TvInputManager.INPUT_STATE_CONNECTED;
             if (best == null || (connected && !bestConnected)) { best = t; bestConnected = connected; }
         }
-        if (best != null) {
-            Intent i = new Intent(Intent.ACTION_VIEW, TvContract.buildChannelUriForPassthroughInput(best.getId()));
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if (launch(i)) return;
+        if (best != null && switchToInput(best.getId())) return;
+        openSourcePicker();
+    }
+
+    /**
+     * Switch the TV to a passthrough input (HDMI etc.).
+     * Yandex TV: the stock content://android.media.tv/passthrough/... link goes to an activity that only
+     * accepts callers holding yandex.tv.permission.ACCESS_TV_SOURCE, while the same link with the
+     * live-tv:// scheme goes to Yandex's SourcePlaybackActivity. Try both, then the plain Android way.
+     */
+    private boolean switchToInput(String inputId) {
+        android.net.Uri uri = TvContract.buildChannelUriForPassthroughInput(inputId);
+        android.net.Uri[] tries = { uri.buildUpon().scheme("live-tv").build(), uri };
+        for (android.net.Uri u : tries) {
+            Intent i = new Intent(Intent.ACTION_VIEW, u).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (launch(i)) return true;
         }
+        return false;
+    }
+
+    /** The TV's own source picker: Yandex TV first, then the manufacturer's. */
+    private void openSourcePicker() {
+        if (launch(new Intent("yandex.intent.action.TV_SOURCE").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))) return;
         if (isInstalled(liveTvPkg)) openPackage(liveTvPkg);
         else openPackage(inputPickerPkg);
     }
@@ -594,11 +612,7 @@ public class MainActivity extends Activity {
         }
         Collections.sort(inputs, (x, y) -> inputLabel(x).compareToIgnoreCase(inputLabel(y)));
         for (TvInputInfo t : inputs) {
-            rows.add(inputRow(inputLabel(t), () -> {
-                Intent i = new Intent(Intent.ACTION_VIEW, TvContract.buildChannelUriForPassthroughInput(t.getId()));
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                if (!launch(i)) openPackage(inputPickerPkg);
-            }));
+            rows.add(inputRow(inputLabel(t), () -> { if (!switchToInput(t.getId())) openSourcePicker(); }));
         }
         if (isInstalled(liveTvPkg)) rows.add(inputRow("Эфир ТВ", () -> openPackage(liveTvPkg)));
         if (inputs.isEmpty() && isInstalled(inputPickerPkg)) rows.add(inputRow("Все источники…", () -> openPackage(inputPickerPkg)));
