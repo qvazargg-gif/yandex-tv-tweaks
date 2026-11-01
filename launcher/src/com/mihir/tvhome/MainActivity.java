@@ -555,6 +555,10 @@ public class MainActivity extends Activity {
     }
 
     private void openHdmi() {
+        // The input last picked in the Inputs menu wins: on some MediaTek sets the reported
+        // "connected" state does not match the port that actually has a signal.
+        String saved = getPreferences(MODE_PRIVATE).getString("hdmi_input", null);
+        if (saved != null && switchToInput(saved)) return;
         TvInputManager tim = (TvInputManager) getSystemService(TV_INPUT_SERVICE);
         TvInputInfo best = null;
         boolean bestConnected = false;
@@ -612,7 +616,10 @@ public class MainActivity extends Activity {
         }
         Collections.sort(inputs, (x, y) -> inputLabel(x).compareToIgnoreCase(inputLabel(y)));
         for (TvInputInfo t : inputs) {
-            rows.add(inputRow(inputLabel(t), () -> { if (!switchToInput(t.getId())) openSourcePicker(); }));
+            rows.add(inputRow(inputLabel(t), () -> {
+                getPreferences(MODE_PRIVATE).edit().putString("hdmi_input", t.getId()).apply();
+                if (!switchToInput(t.getId())) openSourcePicker();
+            }));
         }
         if (isInstalled(liveTvPkg)) rows.add(inputRow("Эфир ТВ", () -> openPackage(liveTvPkg)));
         if (inputs.isEmpty() && isInstalled(inputPickerPkg)) rows.add(inputRow("Все источники…", () -> openPackage(inputPickerPkg)));
